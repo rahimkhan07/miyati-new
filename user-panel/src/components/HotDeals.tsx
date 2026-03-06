@@ -13,20 +13,87 @@ type Product = {
   saleEndsAt: Date;
 };
 
-const product: Product = {
-  id: 1,
-  brand: "BRAND 3",
-  name: "Gamesir T4 Pro Wireless",
-  image: "https://via.placeholder.com/250x150",
-  rating: 4,
-  oldPrice: 749.0,
-  newPrice: 711.55,
-  discountPercent: 5,
-  availability: 999,
-  saleEndsAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-};
+const products: Product[] = [
+  {
+    id: 1,
+    brand: "BRAND 1",
+    name: "Gamesir T4 Pro Wireless",
+    image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&q=80&w=400",
+    rating: 4,
+    oldPrice: 749.0,
+    newPrice: 711.55,
+    discountPercent: 5,
+    availability: 999,
+    saleEndsAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: 2,
+    brand: "BRAND 2",
+    name: "Wireless Headphones Pro",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400",
+    rating: 5,
+    oldPrice: 1299.0,
+    newPrice: 899.0,
+    discountPercent: 31,
+    availability: 450,
+    saleEndsAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: 3,
+    brand: "BRAND 3",
+    name: "Smart Watch Series 7",
+    image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&q=80&w=400",
+    rating: 5,
+    oldPrice: 2499.0,
+    newPrice: 1999.0,
+    discountPercent: 20,
+    availability: 250,
+    saleEndsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: 4,
+    brand: "BRAND 4",
+    name: "Mechanical Keyboard RGB",
+    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&q=80&w=400",
+    rating: 4,
+    oldPrice: 899.0,
+    newPrice: 649.0,
+    discountPercent: 28,
+    availability: 680,
+    saleEndsAt: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: 5,
+    brand: "BRAND 5",
+    name: "Wireless Mouse Gaming",
+    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&q=80&w=400",
+    rating: 5,
+    oldPrice: 599.0,
+    newPrice: 399.0,
+    discountPercent: 33,
+    availability: 890,
+    saleEndsAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: 6,
+    brand: "BRAND 6",
+    name: "Portable Speaker Bluetooth",
+    image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&q=80&w=400",
+    rating: 4,
+    oldPrice: 1499.0,
+    newPrice: 999.0,
+    discountPercent: 33,
+    availability: 320,
+    saleEndsAt: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
+  },
+];
 
-const HotDeals: React.FC = () => {
+interface HotDealsProps {
+  productIndex?: number;
+}
+
+const HotDeals: React.FC<HotDealsProps> = ({ productIndex = 0 }) => {
+  const product = products[productIndex % products.length];
   const [timeLeft, setTimeLeft] = useState(
     getTimeRemaining(product.saleEndsAt),
   );
@@ -37,25 +104,12 @@ const HotDeals: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [product.saleEndsAt]);
 
   return (
     <div className="w-[320px] font-sans item-center">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        
-        {/* <div className="flex gap-2">
-          <button className="text-lg cursor-pointer bg-transparent border-none">
-            {"<"}
-          </button>
-          <button className="text-lg cursor-pointer bg-transparent border-none">
-            {">"}
-          </button>
-        </div> */}
-      </div>
-
       {/* Card */}
-      <div className="bg-[#f8f8f8] p-5 rounded-xl mt-4 text-center">
+      <div className="bg-[#f8f8f8] p-5 rounded-xl mt-4 text-center shadow-lg hover:shadow-xl transition-shadow duration-300">
         {/* Badges */}
         <div className="flex gap-2 justify-start">
           <span className="bg-[#e53935] text-white px-2 py-1 text-xs rounded">
@@ -67,17 +121,22 @@ const HotDeals: React.FC = () => {
         </div>
 
         {/* Image */}
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full max-h-[160px] object-contain my-4"
-        />
+        <div className="w-full h-[160px] flex items-center justify-center my-4 bg-white rounded-lg">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="max-w-full max-h-full object-contain"
+            onError={(e) => {
+              e.currentTarget.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+            }}
+          />
+        </div>
 
         {/* Brand */}
         <p className="text-gray-500 text-xs">{product.brand}</p>
 
         {/* Title */}
-        <h3 className="my-1 text-lg">{product.name}</h3>
+        <h3 className="my-1 text-lg font-semibold">{product.name}</h3>
 
         {/* Rating */}
         <div className="my-2">

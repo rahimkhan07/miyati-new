@@ -480,11 +480,343 @@ const SocialMediaVideos: React.FC<{
 
 
 
+// Promotional Banner Component with Slider
+const PromotionalBanner: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const banners = [
+    {
+      title: "GALAXY S21 5G",
+      subtitle: "PRE-ORDER NOW",
+      label: "AVAILABLE 1.29",
+      description: "Get up to $200 in Samsung Credit.",
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=800",
+      fallbackImage: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&q=80&w=800",
+      gradient: "from-gray-700 to-gray-800",
+      buttonColor: "bg-yellow-500 text-gray-900 hover:bg-yellow-400",
+    },
+    {
+      title: "IPHONE 14 PRO",
+      subtitle: "NOW AVAILABLE",
+      label: "LIMITED STOCK",
+      description: "Experience the power of A16 Bionic chip.",
+      image: "https://images.unsplash.com/photo-1592286927505-b0501739c61b?auto=format&fit=crop&q=80&w=800",
+      fallbackImage: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=800",
+      gradient: "from-gray-800 to-gray-900",
+      buttonColor: "bg-yellow-500 text-gray-900 hover:bg-yellow-400",
+    },
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % banners.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
+  };
+
+  // Auto-advance slides
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="lg:col-span-2 relative overflow-hidden rounded-2xl shadow-xl h-[400px]">
+      {banners.map((banner, index) => (
+        <div
+          key={index}
+          className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+            index === currentSlide ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
+          }`}
+        >
+          <div className={`absolute inset-0 bg-gradient-to-br ${banner.gradient}`} />
+          
+          <div className="relative z-10 h-full p-8 sm:p-12 flex flex-col justify-center">
+            <div className="max-w-md">
+              <p className="text-white text-sm font-medium mb-2 uppercase tracking-wide">
+                {banner.label}
+              </p>
+              <h2 className="text-white text-4xl sm:text-5xl font-bold mb-2 leading-tight">
+                {banner.title}
+              </h2>
+              <h3 className="text-white text-3xl sm:text-4xl font-bold mb-4 leading-tight">
+                {banner.subtitle}
+              </h3>
+              <p className="text-white text-lg mb-6 opacity-90">
+                {banner.description}
+              </p>
+              <button 
+                onClick={() => window.location.hash = '#/user/shop'}
+                className={`${banner.buttonColor} px-8 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5`}
+              >
+                SHOP NOW
+              </button>
+            </div>
+          </div>
+
+          {/* Product Image */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full pointer-events-none">
+            <img
+              src={banner.image}
+              alt={banner.title}
+              className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain drop-shadow-2xl"
+              onError={(e) => {
+                e.currentTarget.src = banner.fallbackImage;
+              }}
+            />
+          </div>
+        </div>
+      ))}
+
+      {/* Navigation Buttons */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-all duration-300 z-20"
+        aria-label="Previous banner"
+      >
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-all duration-300 z-20"
+        aria-label="Next banner"
+      >
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="absolute bottom-6 left-8 flex gap-2 z-20">
+        {banners.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentSlide ? 'bg-white w-6' : 'bg-white/50'
+            }`}
+            aria-label={`Go to banner ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Hot Deals Carousel Component
+const HotDealsCarousel: React.FC = () => {
+  const [currentDeal, setCurrentDeal] = useState(0);
+  const [timeLeft, setTimeLeft] = useState({
+    days: 1364,
+    hours: 1,
+    minutes: 50,
+    seconds: 21,
+  });
+
+  const deals = [
+    {
+      name: "Flydigi Vader Wireless",
+      image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&q=80&w=400",
+      fallbackImage: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&q=80&w=400",
+      originalPrice: 64.00,
+      salePrice: 19.20,
+      discount: 70,
+      rating: 5,
+      stock: 900,
+      badges: ["On Sale!", "New"],
+    },
+    {
+      name: "PlayStation 5 Console",
+      image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&q=80&w=400",
+      fallbackImage: "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13?auto=format&fit=crop&q=80&w=400",
+      originalPrice: 499.00,
+      salePrice: 399.00,
+      discount: 20,
+      rating: 5,
+      stock: 150,
+      badges: ["Hot!", "New"],
+    },
+    {
+      name: "Wireless Headphones",
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400",
+      fallbackImage: "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&q=80&w=400",
+      originalPrice: 199.00,
+      salePrice: 149.00,
+      discount: 25,
+      rating: 4,
+      stock: 500,
+      badges: ["Sale!", "Popular"],
+    },
+  ];
+
+  const currentProduct = deals[currentDeal];
+
+  const nextDeal = () => {
+    setCurrentDeal((prev) => (prev + 1) % deals.length);
+  };
+
+  const prevDeal = () => {
+    setCurrentDeal((prev) => (prev - 1 + deals.length) % deals.length);
+  };
+
+  // Countdown timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        let { days, hours, minutes, seconds } = prev;
+        
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else if (days > 0) {
+          days--;
+          hours = 23;
+          minutes = 59;
+          seconds = 59;
+        }
+        
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-bold text-gray-900">Hot Deals</h3>
+        <div className="flex gap-2">
+          <button 
+            onClick={prevDeal}
+            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+            aria-label="Previous deal"
+          >
+            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button 
+            onClick={nextDeal}
+            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+            aria-label="Next deal"
+          >
+            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Product Card */}
+      <div className="text-center">
+        <div className="flex gap-2 mb-3 justify-center">
+          {currentProduct.badges.map((badge, index) => (
+            <span 
+              key={index}
+              className={`text-white text-xs px-2 py-1 rounded font-semibold ${
+                badge.includes('Sale') || badge.includes('Hot') ? 'bg-red-500' : 'bg-blue-500'
+              }`}
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+        
+        <div className="mb-4 bg-gray-50 rounded-xl p-4 h-48 flex items-center justify-center">
+          <img
+            src={currentProduct.image}
+            alt={currentProduct.name}
+            className="max-w-full max-h-full object-contain transition-transform duration-300 hover:scale-105"
+            onError={(e) => {
+              e.currentTarget.src = currentProduct.fallbackImage;
+            }}
+          />
+        </div>
+
+        <h4 className="text-sm font-semibold text-gray-900 mb-2">
+          {currentProduct.name}
+        </h4>
+
+        {/* Rating */}
+        <div className="flex justify-center gap-1 mb-2">
+          {[...Array(5)].map((_, i) => (
+            <svg 
+              key={i} 
+              className={`w-4 h-4 ${
+                i < currentProduct.rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-300 text-gray-300'
+              }`} 
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+        </div>
+
+        {/* Price */}
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <span className="text-gray-400 line-through text-sm">
+            ${currentProduct.originalPrice.toFixed(2)}
+          </span>
+          <span className="text-red-500 font-bold text-lg">
+            ${currentProduct.salePrice.toFixed(2)}
+          </span>
+          <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded font-semibold">
+            -{currentProduct.discount}%
+          </span>
+        </div>
+
+        <p className="text-xs text-gray-500 mb-3">
+          Availability: {currentProduct.stock} in Stock
+        </p>
+
+        {/* Countdown Timer */}
+        <div className="flex justify-center gap-1 text-center">
+          <div className="bg-gray-800 text-white rounded-lg px-2 py-2 min-w-[45px]">
+            <div className="text-base font-bold">{timeLeft.days}</div>
+            <div className="text-[9px] uppercase">Days</div>
+          </div>
+          <div className="flex items-center text-gray-800 font-bold text-sm">:</div>
+          <div className="bg-gray-800 text-white rounded-lg px-2 py-2 min-w-[45px]">
+            <div className="text-base font-bold">{timeLeft.hours}</div>
+            <div className="text-[9px] uppercase">Hour</div>
+          </div>
+          <div className="flex items-center text-gray-800 font-bold text-sm">:</div>
+          <div className="bg-gray-800 text-white rounded-lg px-2 py-2 min-w-[45px]">
+            <div className="text-base font-bold">{timeLeft.minutes}</div>
+            <div className="text-[9px] uppercase">Mins</div>
+          </div>
+          <div className="flex items-center text-gray-800 font-bold text-sm">:</div>
+          <div className="bg-gray-800 text-white rounded-lg px-2 py-2 min-w-[45px]">
+            <div className="text-base font-bold">{timeLeft.seconds}</div>
+            <div className="text-[9px] uppercase">Secs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 export default function Home() {
   const { items: products, loading: productsLoading } = useProducts();
   const { addItem } = useCart();
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [csvProducts, setCsvProducts] = useState<any[]>([]);
+
+  // Blog posts state
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [blogLoading, setBlogLoading] = useState(true);
 
   useEffect(() => {
     const fetchCsvProducts = async () => {
@@ -500,6 +832,38 @@ export default function Home() {
       }
     };
     fetchCsvProducts();
+  }, []);
+
+  // Fetch blog posts
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const apiBase = getApiBase();
+        const response = await fetch(`${apiBase}/api/blog/posts`);
+        if (response.ok) {
+          const data = await response.json();
+          // Filter approved posts and convert image paths
+          const approvedPosts = data
+            .filter((post: any) => post.status === 'approved')
+            .map((post: any) => ({
+              ...post,
+              images: post.images.map((imagePath: string) => {
+                if (imagePath.startsWith('/uploads/')) {
+                  return `${apiBase}${imagePath}`;
+                }
+                return imagePath;
+              }),
+            }))
+            .slice(0, 4); // Get only first 4 posts
+          setBlogPosts(approvedPosts);
+        }
+      } catch (error) {
+        console.error("Failed to fetch blog posts:", error);
+      } finally {
+        setBlogLoading(false);
+      }
+    };
+    fetchBlogPosts();
   }, []);
   const [videos, setVideos] = useState<any[]>([]);
   const videoScrollerRef = useRef<HTMLDivElement>(null);
@@ -519,6 +883,8 @@ export default function Home() {
     "https://images.unsplash.com/photo-1571781926291-c477eb317dc0?auto=format&fit=crop&q=80&w=1920",
     "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&q=80&w=1920",
     "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=1920",
+    "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1920",
+    "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1920",
   ]);
   const [topMediaSettings, setTopMediaSettings] = useState<any>({
     animationType: "fade",
@@ -536,6 +902,8 @@ export default function Home() {
     "https://images.unsplash.com/photo-1615397323226-f7035ce4c94f?auto=format&fit=crop&q=80&w=1920",
     "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&q=80&w=1920",
     "https://images.unsplash.com/photo-1556228720-1c2a4624dc2fb?auto=format&fit=crop&q=80&w=1920",
+    "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=1920",
+    "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=1920",
   ]);
   const [heroSettings, setHeroSettings] = useState<any>({
     animationType: "fade",
@@ -559,11 +927,15 @@ export default function Home() {
     "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=400",
     "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=400",
     "https://images.unsplash.com/photo-1615397323226-f7035ce4c94f?auto=format&fit=crop&q=80&w=400",
+    "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=400",
+    "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400",
   ]);
-  const [completeKitImage, setCompleteKitImage] = useState<string>("https://images.unsplash.com/photo-1556228720-1c2a4624dc2fb?auto=format&fit=crop&q=80&w=1200");
+  const [completeKitImage, setCompleteKitImage] = useState<string>("https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=1200");
   const [marketplaceLogos, setMarketplaceLogos] = useState<string[]>([
     "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=200",
     "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&q=80&w=200",
+    "https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&fit=crop&q=80&w=200",
+    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=200",
   ]);
   const [nefolCollection, setNefolCollection] = useState<any>({
     image: "https://images.unsplash.com/photo-1608248593842-8021c6b12d5d?auto=format&fit=crop&q=80&w=800",
@@ -575,7 +947,7 @@ export default function Home() {
     buttonLink: "/shop",
   });
   const [whatsappSubscription, setWhatsappSubscription] = useState({
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=600",
+    image: "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=600",
     logo: "",
     heading: "Join The NEFOL® Circle",
     description:
@@ -589,18 +961,18 @@ export default function Home() {
     description:
       "Discover our most loved products that have become staples in skincare routines worldwide.",
     luxurySkincare: {
-      image: "https://images.unsplash.com/photo-1615397323226-f7035ce4c94f?auto=format&fit=crop&q=80&w=600",
+      image: "https://images.unsplash.com/photo-1570554886111-e80fcca6a029?auto=format&fit=crop&q=80&w=600",
       title: "LUXURY SKINCARE",
       buttonText: "SHOP NOW",
     },
     naturalBeauty: {
-      image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=600",
+      image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=600",
       title: "NATURAL BEAUTY",
       buttonText: "SHOP NOW",
     },
   });
   const [naturalBeauty, setNaturalBeauty] = useState<any>({
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&q=80&w=800",
     title: "NATURAL BEAUTY",
     subtitle: "ELEVATE YOUR SKIN WITH",
     description: "infused with premium natural ingredients",
@@ -1055,224 +1427,191 @@ export default function Home() {
           --arctic-blue-background: #F4F9F9;
         }
       `}</style>
-      {/* Scrolling Text Banner - Between Navbar and Top Media Carousel */}
-      {scrollingText && (
-        <section
-          className="relative py-2 overflow-hidden mt-0 sm:mt-2 md:mt-4"
-          style={{ backgroundColor: "var(--arctic-blue-primary)" }}
-        >
-          <div className="scrolling-text-wrapper">
-            <div className="scrolling-text-content">
-              <span className="scrolling-text-item">{scrollingText}</span>
-              <span className="scrolling-text-separator"> • </span>
-              <span className="scrolling-text-item">{scrollingText}</span>
-              <span className="scrolling-text-separator"> • </span>
-              <span className="scrolling-text-item">{scrollingText}</span>
-              <span className="scrolling-text-separator"> • </span>
-              <span className="scrolling-text-item">{scrollingText}</span>
-              <span className="scrolling-text-separator"> • </span>
-              <span className="scrolling-text-item">{scrollingText}</span>
-              <span className="scrolling-text-separator"> • </span>
-              <span className="scrolling-text-item">{scrollingText}</span>
-            </div>
-          </div>
-          <style>{`
-            .scrolling-text-wrapper {
-              width: 100%;
-              overflow: hidden;
-              white-space: nowrap;
-              position: relative;
-            }
-            .scrolling-text-content {
-              display: inline-flex;
-              align-items: center;
-              will-change: transform;
-              animation: scroll-left-to-right 40s linear infinite;
-              font-weight: 600;
-              font-size: 0.875rem;
-              color: #ffffff;
-              text-transform: uppercase;
-              letter-spacing: 0.05em;
-            }
-            .scrolling-text-item {
-              display: inline-block;
-              padding: 0 2rem;
-              white-space: nowrap;
-              flex-shrink: 0;
-            }
-            .scrolling-text-separator {
-              display: inline-block;
-              padding: 0 1rem;
-              flex-shrink: 0;
-            }
-            @keyframes scroll-left-to-right {
-              0% {
-                transform: translateX(0);
-              }
-              100% {
-                transform: translateX(calc(-50%));
-              }
-            }
-            @media (max-width: 640px) {
-              .scrolling-text-content {
-                font-size: 0.75rem;
-              }
-              .scrolling-text-item {
-                padding: 0 1rem;
-              }
-            }
-            @media (min-width: 641px) and (max-width: 1024px) {
-              .scrolling-text-content {
-                font-size: 0.875rem;
-              }
-              .scrolling-text-item {
-                padding: 0 1.5rem;
-              }
-            }
-          `}</style>
-        </section>
-      )}
-      {/* Top Media Carousel Section - Above Hero Banner */}
-      {topMediaImages.length > 0 && (
-        <section
-          className="relative bg-white w-full mt-2 sm:mt-4 md:mt-6"
-          style={{
-            paddingLeft: "env(safe-area-inset-left)",
-            paddingRight: "env(safe-area-inset-right)",
-          }}
-        >
-          <div className="mx-auto w-full py-0 sm:py-2 md:py-4">
-            <div className="relative top-media-carousel-container">
-              {topMediaImages[topMediaIndex] && (
-                <>
-                  {/\.(mp4|webm|ogg|mov|avi)(\?|$)/i.test(
-                    topMediaImages[topMediaIndex],
-                  ) ? (
-                    <video
-                      src={topMediaImages[topMediaIndex]}
-                      className="absolute inset-0 w-full h-full object-cover bg-black rounded-xl"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      key={topMediaIndex}
-                      style={{
-                        objectFit: "cover",
-                        width: "100%",
-                        height: "100%",
-                        minWidth: "100%",
-                        minHeight: "100%",
-                      }}
-                    />
-                  ) : (
-                    <img
-                      src={topMediaImages[topMediaIndex]}
-                      alt="Top Media Carousel"
-                      className="absolute inset-0 w-full h-full object-cover rounded-xl"
-                      style={{
-                        objectFit: "cover",
-                        width: "100%",
-                        height: "100%",
-                        minWidth: "100%",
-                        minHeight: "100%",
-                      }}
-                      key={topMediaIndex}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1571781926291-c477eb317dc0?auto=format&fit=crop&q=80&w=1920";
-                      }}
-                    />
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-          <style>{`
-            .top-media-carousel-container {
-              aspect-ratio: 16/9;
-              width: 100%;
-              position: relative;
-              display: block;
-              max-width: 100%;
-            }
-          `}</style>
-        </section>
-      )}
+      {/* Modern Carousel Slider */}
+      <section className="relative w-full bg-gray-50 py-8 sm:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-2xl shadow-2xl" style={{ height: '500px' }}>
+            {/* Carousel Images */}
+            {topMediaImages.map((image, index) => {
+              const slides = [
+                {
+                  image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1920",
+                  title: "Premium Headphones",
+                  subtitle: "Experience Crystal Clear Sound",
+                },
+                {
+                  image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=1920",
+                  title: "Latest Collection",
+                  subtitle: "Latest Collection 2024",
+                },
+                {
+                  image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=1920",
+                  title: "Sport Collection",
+                  subtitle: "Run Faster, Jump Higher",
+                },
+                {
+                  image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&q=80&w=1920",
+                  title: "Gaming Gear",
+                  subtitle: "Level Up Your Game",
+                },
+                {
+                  image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1920",
+                  title: "Smart Devices",
+                  subtitle: "Technology Meets Style",
+                },
+              ];
 
-      {/* Social Media Videos Section - Between Top Media and Hero */}
-      {/* {videos.length > 0 && (
-        <section className="py-8 sm:py-12 md:py-16 bg-white">
-          <div className="w-full max-w-full">
-            <div className="text-center mb-8 sm:mb-12 px-4">
-              <h1
-                className="script-text"
-                style={{ visibility: "visible", opacity: 1 }}
-              >
-                Aesthetics Lover's Choice!
-              </h1>
-            </div>
-            <div className="w-full">
-              <SocialMediaVideos
-                videos={videos}
-                scrollerRef={videoScrollerRef}
-              />
-            </div>
-          </div>
-        </section>
-      )} */}
+              const slide = slides[index % slides.length];
+              
+              // Different gradient colors for each slide
+              const gradientColors = [
+                'from-purple-600/0 to-blue-600/0 hover:from-purple-600/70 hover:to-blue-600/70', // Headphones
+                'from-orange-500/0 to-pink-600/0 hover:from-orange-500/70 hover:to-pink-600/70', // Products
+                'from-green-500/0 to-teal-600/0 hover:from-green-500/70 hover:to-teal-600/70', // Shoes
+                'from-red-600/0 to-purple-600/0 hover:from-red-600/70 hover:to-purple-600/70', // Gaming
+                'from-blue-600/0 to-indigo-700/0 hover:from-blue-600/70 hover:to-indigo-700/70', // Smart Devices
+              ];
+              
+              return (
+                <div
+                  key={index}
+                  className={`absolute inset-0 transition-all duration-700 ease-in-out group ${
+                    index === topMediaIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                  }`}
+                >
+                  {/* Background Image */}
+                  <img
+                    src={slide.image}
+                    alt={slide.title || `Slide ${index + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = image;
+                    }}
+                  />
+                  
+                  {/* Dark Overlay for Text Readability */}
+                  <div className="absolute inset-0 bg-black/30" />
+                  
+                  {/* Colored Gradient Overlay on Hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${gradientColors[index % gradientColors.length]} transition-all duration-500`} />
 
-      {/* Hero Banner Section */}
-      {heroImages.length > 0 && (
-        <section className="relative w-full bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-4 sm:py-6 md:py-8">
-            <div
-              className="relative w-full"
-              style={{
-                aspectRatio: "16/9",
-                maxHeight: "80vh",
-                minHeight: "300px",
+                  {/* Content */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center text-white px-4 max-w-3xl">
+                      {slide.title && (
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 drop-shadow-2xl">
+                          {slide.title}
+                        </h2>
+                      )}
+                      <p className="text-xl sm:text-2xl md:text-3xl opacity-95 drop-shadow-lg font-light">
+                        {slide.subtitle}
+                      </p>
+                      <button 
+                        onClick={() => window.location.hash = '#/user/shop'}
+                        className="mt-8 bg-yellow-500 text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                      >
+                        SHOP NOW
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Previous Button */}
+            <button
+              onClick={() => {
+                setTopMediaIndex((prev) => 
+                  prev === 0 ? topMediaImages.length - 1 : prev - 1
+                );
               }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 z-10 group"
+              aria-label="Previous slide"
             >
-              {heroImages[heroIndex] && (
-                <>
-                  {/\.(mp4|webm|ogg|mov|avi)(\?|$)/i.test(
-                    heroImages[heroIndex],
-                  ) ? (
-                    <video
-                      src={heroImages[heroIndex]}
-                      className="absolute inset-0 w-full h-full object-cover bg-black rounded-xl"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      key={heroIndex}
-                      style={{ objectFit: "cover" }}
-                    />
-                  ) : (
-                    <img
-                      src={heroImages[heroIndex]}
-                      alt="Hero Banner"
-                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out rounded-xl"
-                      style={{
-                        objectFit: "cover",
-                        opacity: 1,
-                        transition: `opacity ${heroSettings.transitionDuration || 1000}ms ease-in-out`,
-                      }}
-                      key={heroIndex}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1615397323226-f7035ce4c94f?auto=format&fit=crop&q=80&w=1920";
-                      }}
-                    />
-                  )}
-                </>
-              )}
+              <svg className="w-6 h-6 text-gray-800 group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            {/* Next Button */}
+            <button
+              onClick={() => {
+                setTopMediaIndex((prev) => 
+                  prev === topMediaImages.length - 1 ? 0 : prev + 1
+                );
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 z-10 group"
+              aria-label="Next slide"
+            >
+              <svg className="w-6 h-6 text-gray-800 group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            {/* Dots Indicator */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              {topMediaImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setTopMediaIndex(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    index === topMediaIndex
+                      ? 'w-8 h-3 bg-white shadow-md'
+                      : 'w-3 h-3 bg-white/50 hover:bg-white/75'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
+      {/* Promotional Section with Featured Products and Hot Deals */}
+      <section className="py-8 sm:py-12 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Banner - Promotional Slider */}
+            <PromotionalBanner />
+
+            {/* Right Column - Watch and Hot Deals */}
+            <div className="space-y-6">
+              {/* Smartwatch Banner */}
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-700 to-gray-800 p-6 shadow-xl h-48">
+                <div className="relative z-10">
+                  <h3 className="text-white text-2xl font-bold mb-2">
+                    ZEBLAZE 3
+                  </h3>
+                  <p className="text-white text-sm mb-4 opacity-90">
+                    SmartWatches Pro
+                  </p>
+                  <button 
+                    onClick={() => window.location.hash = '#/user/shop'}
+                    className="bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition-all duration-300"
+                  >
+                    SHOP NOW →
+                  </button>
+                </div>
+                
+                {/* Watch Image */}
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 w-32 h-32">
+                  <img
+                    src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&q=80&w=400"
+                    alt="Smartwatch"
+                    className="w-full h-full object-contain drop-shadow-2xl"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Hot Deals Section */}
+              <HotDealsCarousel />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ==================Hot Deals======================= */}
       <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -1283,9 +1622,9 @@ export default function Home() {
           Hot Deals <br/> will be end soon
 
         </h1>
-        <HotDeals />
-        <HotDeals />
-        <HotDeals />
+        <HotDeals productIndex={0} />
+        <HotDeals productIndex={1} />
+        <HotDeals productIndex={2} />
       </div>
 
 
@@ -1415,12 +1754,20 @@ export default function Home() {
                                 className="max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
                                 loading="lazy"
                                 onError={(e) => {
-                                  e.currentTarget.src = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400";
+                                  const fallbackImages = [
+                                    "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400",
+                                    "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&q=80&w=400",
+                                    "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=400",
+                                    "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400",
+                                    "https://images.unsplash.com/photo-1570554886111-e80fcca6a029?auto=format&fit=crop&q=80&w=400",
+                                    "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&q=80&w=400",
+                                  ];
+                                  e.currentTarget.src = fallbackImages[index % fallbackImages.length];
                                 }}
                               />
                             ) : (
                               <img
-                                src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400"
+                                src={`https://images.unsplash.com/photo-${['1620916566398-39f1143ab7be', '1556228578-8c89e6adf883', '1571019613454-1cb2f99b2d8b', '1598440947619-2c35fc9aa908', '1570554886111-e80fcca6a029', '1612817288484-6f916006741a'][index % 6]}?auto=format&fit=crop&q=80&w=400`}
                                 alt={product.title}
                                 className="max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
                                 loading="lazy"
@@ -1432,7 +1779,7 @@ export default function Home() {
                         {/* HOVER ADD TO CART */}
                         {!isSoldOut && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition duration-300">
-                            <button className="bg-blue-600 text-white mx-15 px-5 py-3 rounded-full text-sm font-semibold shadow-lg hover:bg-blue-400 transition">
+                            <button className="bg-yellow-500 text-gray-900 mx-15 px-5 py-3 rounded-lg text-sm font-semibold shadow-lg hover:bg-yellow-400 transition">
                               Add To Cart
                             </button>
                           </div>
@@ -1642,181 +1989,113 @@ export default function Home() {
         />
       </section>
 
-      {/* Complete Kit Banner Section */}
-      {completeKitImage && (
-        <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {/* Desktop Layout - Text Overlay on Image */}
-            <div className="hidden md:block relative overflow-hidden complete-kit-container rounded-xl">
-              <img
-                src={completeKitImage}
-                alt="Complete Kit"
-                className="w-full h-full object-cover rounded-xl"
-                onError={(e) => {
-                  e.currentTarget.src = "https://images.unsplash.com/photo-1556228720-1c2a4624dc2fb?auto=format&fit=crop&q=80&w=1200";
-                }}
-              />
-              <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                <div className="text-center px-4">
-                  <h2
-                    className="complete-kit-title font-light mb-4 sm:mb-6 text-white tracking-[0.15em]"
-                    style={{
-                      fontFamily: "var(--font-heading-family)",
-                      letterSpacing: "0.15em",
-                    }}
-                  >
-                    THE COMPLETE KIT
-                  </h2>
-                  <p
-                    className="complete-kit-description text-white/90 mb-6 sm:mb-8 font-light tracking-wide"
-                    style={{ letterSpacing: "0.05em" }}
-                  >
-                    Get the full NEFOL® experience in one curated bundle
-                  </p>
-                  <button
-                    onClick={() => (window.location.hash = "#/user/combos")}
-                    className="complete-kit-button px-4 sm:px-6 md:px-8 py-2 sm:py-3 text-white font-medium tracking-wide uppercase transition-colors duration-200 rounded-xl"
-                    style={{ backgroundColor: "var(--arctic-blue-primary)" }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "var(--arctic-blue-primary-hover)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "var(--arctic-blue-primary)";
-                    }}
-                  >
-                    View Kit
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Layout - Image First, Then Text and Button Below */}
-            <div className="md:hidden">
-              <div
-                className="relative overflow-hidden rounded-xl mb-4"
-                style={{ height: "250px" }}
+      {/* Latest Blogs Section */}
+      <section className="py-8 sm:py-12 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Latest Blogs</h2>
+            <div className="flex gap-2">
+              <button 
+                className="w-10 h-10 rounded-full bg-white hover:bg-gray-100 shadow-md flex items-center justify-center transition-all duration-300"
+                aria-label="Previous blogs"
+                onClick={() => window.location.hash = '#/user/blog'}
               >
-                <img
-                  src={completeKitImage}
-                  alt="Complete Kit"
-                  className="w-full h-full object-cover rounded-xl"
-                  onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1556228720-1c2a4624dc2fb?auto=format&fit=crop&q=80&w=1200";
-                  }}
-                />
-              </div>
-              <div className="text-center px-4">
-                <h2
-                  className="text-xl font-light mb-3 text-slate-900 tracking-[0.15em]"
-                  style={{
-                    fontFamily: "var(--font-heading-family)",
-                    letterSpacing: "0.15em",
-                  }}
-                >
-                  THE COMPLETE KIT
-                </h2>
-                <p
-                  className="text-sm text-slate-600 mb-6 font-light tracking-wide"
-                  style={{ letterSpacing: "0.05em" }}
-                >
-                  Get the full NEFOL® experience in one curated bundle
-                </p>
-                <button
-                  onClick={() => (window.location.hash = "#/user/combos")}
-                  className="px-6 py-3 text-white font-medium tracking-wide uppercase transition-colors duration-200 rounded-xl"
-                  style={{ backgroundColor: "var(--arctic-blue-primary)" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "var(--arctic-blue-primary-hover)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "var(--arctic-blue-primary)";
-                  }}
-                >
-                  View Kit
-                </button>
-              </div>
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button 
+                className="w-10 h-10 rounded-full bg-white hover:bg-gray-100 shadow-md flex items-center justify-center transition-all duration-300"
+                aria-label="Next blogs"
+                onClick={() => window.location.hash = '#/user/blog'}
+              >
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
           </div>
-          <style>{`
-            .complete-kit-container {
-              width: 100%;
-            }
-            
-            /* Mobile - Smaller height */
-            @media (max-width: 640px) {
-              .complete-kit-container {
-                height: 250px;
-                min-height: 250px;
-              }
-              
-              .complete-kit-title {
-                font-size: 1.25rem;
-                margin-bottom: 0.75rem;
-              }
-              
-              .complete-kit-description {
-                font-size: 0.75rem;
-                margin-bottom: 1rem;
-              }
-              
-              .complete-kit-button {
-                font-size: 0.625rem;
-                padding: 0.5rem 1rem;
-              }
-            }
-            
-            /* Tablet - Medium height */
-            @media (min-width: 641px) and (max-width: 1024px) {
-              .complete-kit-container {
-                height: 350px;
-                min-height: 350px;
-              }
-              
-              .complete-kit-title {
-                font-size: 1.75rem;
-                margin-bottom: 1rem;
-              }
-              
-              .complete-kit-description {
-                font-size: 0.875rem;
-                margin-bottom: 1.5rem;
-              }
-              
-              .complete-kit-button {
-                font-size: 0.75rem;
-                padding: 0.625rem 1.25rem;
-              }
-            }
-            
-            /* Desktop - Full size */
-            @media (min-width: 1025px) {
-              .complete-kit-container {
-                height: 500px;
-                min-height: 500px;
-              }
-              
-              .complete-kit-title {
-                font-size: 2.25rem;
-                margin-bottom: 1.5rem;
-              }
-              
-              .complete-kit-description {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-              }
-              
-              .complete-kit-button {
-                font-size: 0.875rem;
-                padding: 0.75rem 2rem;
-              }
-            }
-          `}</style>
-        </section>
-      )}
+
+          {/* Blog Cards Grid */}
+          {blogLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          ) : blogPosts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {blogPosts.map((post) => {
+                const postImage = post.images && post.images.length > 0 
+                  ? post.images[0] 
+                  : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400';
+                
+                const postDate = new Date(post.created_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                });
+
+                return (
+                  <div 
+                    key={post.id} 
+                    className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
+                    onClick={() => window.location.hash = `#/user/blog/${post.id}`}
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <span className="absolute top-3 left-3 bg-white text-gray-900 text-xs font-semibold px-3 py-1 rounded-full z-10">
+                        {post.featured ? 'FEATURED' : 'MARKETPLACE'}
+                      </span>
+                      <img
+                        src={postImage}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400';
+                        }}
+                      />
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {post.title}
+                      </h3>
+                      <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                        <span>📅 {postDate}</span>
+                        <span>•</span>
+                        <span>✍️ {post.author_name || 'Anonymous'}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                        {post.excerpt || post.content?.substring(0, 100) + '...'}
+                      </p>
+                      <button 
+                        className="text-gray-900 text-sm font-semibold hover:text-yellow-600 flex items-center gap-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.location.hash = `#/user/blog/${post.id}`;
+                        }}
+                      >
+                        Read more
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No blog posts available yet.</p>
+              <button
+                onClick={() => window.location.hash = '#/user/blog'}
+                className="mt-4 text-gray-900 hover:text-yellow-600 font-semibold"
+              >
+                Visit Blog Page
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Nefol Collection Section */}
       {nefolCollection.image && (
@@ -1987,306 +2266,72 @@ export default function Home() {
         </section>
       )}
 
-      {/* Natural Beauty Section */}
-      {naturalBeauty.image && (
-        <section className="py-12 sm:py-16 md:py-20 bg-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center">
-              <div className="text-left">
-                <h2
-                  className="text-2xl sm:text-3xl md:text-4xl font-light mb-4 sm:mb-6 tracking-[0.15em]"
-                  style={{
-                    color: "#1a1a1a",
-                    fontFamily: "var(--font-heading-family)",
-                    letterSpacing: "0.15em",
-                  }}
-                >
-                  {naturalBeauty.title}
-                </h2>
-                <h3
-                  className="text-base sm:text-lg font-light mb-4 sm:mb-6 tracking-wide"
-                  style={{ color: "#666", letterSpacing: "0.05em" }}
-                >
-                  {naturalBeauty.subtitle}
-                </h3>
-                <p
-                  className="text-sm sm:text-base font-light mb-8 sm:mb-10 leading-relaxed"
-                  style={{ color: "#666", letterSpacing: "0.02em" }}
-                >
-                  {naturalBeauty.description}
+      {/* Promotional Banners Section - Before Footer */}
+      <section className="py-8 sm:py-12 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Nike Zoom Banner */}
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-700 to-gray-800 p-8 sm:p-10 shadow-xl h-[250px] group">
+              <div className="relative z-10 h-full flex flex-col justify-center">
+                <p className="text-white text-sm font-medium mb-2 uppercase tracking-wide opacity-90">
+                  Up To 50% Off
                 </p>
-                <button
-                  onClick={() =>
-                    (window.location.hash = `#/user${naturalBeauty.buttonLink || "/shop"}`)
-                  }
-                  className="px-6 sm:px-8 py-3 text-white font-medium transition-all duration-300 text-xs sm:text-sm tracking-wide uppercase rounded-xl"
-                  style={{ backgroundColor: "rgb(75,151,201)" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgb(60,120,160)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgb(75,151,201)";
-                  }}
+                <h2 className="text-white text-3xl sm:text-4xl font-bold mb-6 leading-tight">
+                  Nike Zoom Winflo<br />7 Premium
+                </h2>
+                <button 
+                  onClick={() => window.location.hash = '#/user/shop'}
+                  className="self-start bg-yellow-500 text-gray-900 px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-400 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
-                  {naturalBeauty.buttonText}
+                  SHOP NOW
                 </button>
               </div>
-              <div
-                className="relative lg:order-2 rounded-xl overflow-hidden"
-                style={{ width: "100%", maxWidth: "100%" }}
-              >
-                <div className="relative w-full overflow-hidden">
-                  <img
-                    src={naturalBeauty.image}
-                    alt="Natural Beauty"
-                    className="rounded-xl w-full h-auto"
-                    style={{
-                      display: "block",
-                      objectFit: "contain",
-                      objectPosition: "center",
-                    }}
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=800";
-                    }}
-                  />
-                </div>
+              
+              {/* Shoe Image */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full pointer-events-none">
+                <img
+                  src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=800"
+                  alt="Nike Zoom Winflo"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain drop-shadow-2xl transform transition-transform duration-500 group-hover:scale-110"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=800";
+                  }}
+                />
               </div>
             </div>
-          </div>
-        </section>
-      )}
 
-      {/* Ingredients Section - Blue Pea Featured (like neudeskin's milk) */}
-      <section
-        className="py-12 sm:py-16 md:py-20 relative overflow-hidden"
-        style={{ backgroundColor: "var(--arctic-blue-background)" }}
-      >
-        {/* Curve Effect at top */}
-        <div
-          className="absolute top-0 left-0 w-full h-16 sm:h-24 md:h-32"
-          style={{
-            background:
-              "linear-gradient(to bottom, white 0%, white 50%, var(--arctic-blue-background) 100%)",
-            clipPath: "ellipse(100% 100% at 50% 0%)",
-            transform: "scaleY(-1)",
-          }}
-        />
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2
-              className="text-2xl sm:text-3xl md:text-4xl font-light mb-6 tracking-[0.15em]"
-              style={{
-                color: "#1a1a1a",
-                fontFamily: "var(--font-heading-family)",
-                letterSpacing: "0.15em",
-              }}
-            >
-              Our Star Ingredient
-            </h2>
-            <p
-              className="text-sm sm:text-base font-light max-w-2xl mx-auto tracking-wide"
-              style={{ color: "#666", letterSpacing: "0.05em" }}
-            >
-              Discover the power of nature's finest ingredients
-            </p>
-          </div>
-
-          {/* Blue Pea - Featured Ingredient */}
-          <div className="max-w-4xl mx-auto">
-            <div
-              className="bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
-              onClick={() => (window.location.hash = "#/user/ingredients")}
-              style={{
-                border: "1px solid rgba(125, 211, 211, 0.3)",
-                transition: "all 0.3s ease",
-              }}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-                {/* Image Section */}
-                <div
-                  className="relative overflow-hidden"
-                  style={{ aspectRatio: "1 / 1", minHeight: "300px" }}
+            {/* Samsung Galaxy Banner */}
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 sm:p-10 shadow-xl h-[250px] group">
+              <div className="relative z-10 h-full flex flex-col justify-center">
+                <p className="text-white text-sm font-medium mb-2 uppercase tracking-wide opacity-90">
+                  Offering Smartphones
+                </p>
+                <h2 className="text-white text-3xl sm:text-4xl font-bold mb-6 leading-tight">
+                  Samsung Galaxy<br />At Smart Price!
+                </h2>
+                <button 
+                  onClick={() => window.location.hash = '#/user/shop'}
+                  className="self-start bg-yellow-500 text-gray-900 px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-400 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
-                  <div
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{
-                      WebkitMaskImage:
-                        "radial-gradient(circle at center, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
-                      maskImage:
-                        "radial-gradient(circle at center, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)",
-                      backgroundColor: "var(--arctic-blue-light)",
-                    }}
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=800"
-                      alt="Blue Pea (Aprajita)"
-                      className="w-full h-full object-contain transform transition-transform duration-500 group-hover:scale-110 rounded-xl"
-                      style={{
-                        filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15))",
-                      }}
-                      onError={(e) => {
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80&w=800";
-                      }}
-                    />
-                  </div>
-                  {/* Arctic Blue accent */}
-                  <div
-                    className="absolute bottom-0 left-0 right-0 h-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ backgroundColor: "var(--arctic-blue-primary)" }}
-                  />
-                </div>
-
-                {/* Content Section */}
-                <div className="p-6 sm:p-8 md:p-10 flex flex-col justify-center">
-                  <div className="mb-4">
-                    <span
-                      className="inline-block px-3 py-1 text-xs sm:text-sm font-medium rounded-full mb-3"
-                      style={{
-                        backgroundColor: "var(--arctic-blue-light)",
-                        color: "var(--arctic-blue-primary-dark)",
-                      }}
-                    >
-                      STAR INGREDIENT
-                    </span>
-                    <h3
-                      className="text-2xl sm:text-3xl md:text-4xl font-light mb-4 sm:mb-6 tracking-[0.1em]"
-                      style={{
-                        color: "#1a1a1a",
-                        fontFamily: "var(--font-heading-family)",
-                        letterSpacing: "0.1em",
-                      }}
-                    >
-                      Blue Pea (Tag as Aprajita, Butterfly Pea Flower, Blue Pea
-                      Flower)
-                    </h3>
-                    <p
-                      className="text-xs sm:text-sm italic mb-6 font-light tracking-wide"
-                      style={{ color: "#999", letterSpacing: "0.05em" }}
-                    >
-                      Aprajita • Shankhpushpi
-                    </p>
-                  </div>
-
-                  <p
-                    className="text-sm sm:text-base font-light leading-relaxed mb-8 tracking-wide"
-                    style={{ color: "#666", letterSpacing: "0.02em" }}
-                  >
-                    Rich in powerful antioxidants such as anthocyanins,
-                    flavonoids, and polyphenols, Blue Pea is celebrated for its
-                    skin-brightening, anti-inflammatory, and soothing
-                    properties. This vibrant flower helps neutralize free
-                    radicals and protect the skin from oxidative stress.
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <span
-                      className="px-3 py-1 text-xs rounded-full"
-                      style={{
-                        backgroundColor: "var(--arctic-blue-lighter)",
-                        color: "var(--arctic-blue-primary-dark)",
-                      }}
-                    >
-                      Antioxidant
-                    </span>
-                    <span
-                      className="px-3 py-1 text-xs rounded-full"
-                      style={{
-                        backgroundColor: "var(--arctic-blue-lighter)",
-                        color: "var(--arctic-blue-primary-dark)",
-                      }}
-                    >
-                      Brightening
-                    </span>
-                    <span
-                      className="px-3 py-1 text-xs rounded-full"
-                      style={{
-                        backgroundColor: "var(--arctic-blue-lighter)",
-                        color: "var(--arctic-blue-primary-dark)",
-                      }}
-                    >
-                      Anti-Inflammatory
-                    </span>
-                    <span
-                      className="px-3 py-1 text-xs rounded-full"
-                      style={{
-                        backgroundColor: "var(--arctic-blue-lighter)",
-                        color: "var(--arctic-blue-primary-dark)",
-                      }}
-                    >
-                      Soothing
-                    </span>
-                  </div>
-
-                  <button
-                    className="self-start px-6 sm:px-8 py-3 text-sm sm:text-base font-medium transition-all duration-300 uppercase tracking-wide rounded-xl"
-                    style={{
-                      backgroundColor: "var(--arctic-blue-primary)",
-                      color: "#fff",
-                      border: "none",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "var(--arctic-blue-primary-hover)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "var(--arctic-blue-primary)";
-                    }}
-                  >
-                    Learn More
-                  </button>
-                </div>
+                  SHOP NOW
+                </button>
+              </div>
+              
+              {/* Phone Image */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full pointer-events-none">
+                <img
+                  src="https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&q=80&w=800"
+                  alt="Samsung Galaxy"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain drop-shadow-2xl transform transition-transform duration-500 group-hover:scale-110"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=800";
+                  }}
+                />
               </div>
             </div>
           </div>
         </div>
-
-        {/* Curve Effect at bottom */}
-        <div
-          className="absolute bottom-0 left-0 w-full h-16 sm:h-24 md:h-32"
-          style={{
-            background:
-              "linear-gradient(to top, white 0%, white 50%, var(--arctic-blue-background) 100%)",
-            clipPath: "ellipse(100% 100% at 50% 100%)",
-          }}
-        />
       </section>
-
-      {/* Marketplace Logos Section - Moved to last before footer */}
-      {marketplaceLogos.length > 0 && (
-        <section className="py-12 sm:py-16 md:py-20 bg-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2
-                className="text-2xl sm:text-3xl md:text-4xl font-light mb-6 tracking-[0.15em]"
-                style={{
-                  color: "#1a1a1a",
-                  fontFamily: "var(--font-heading-family)",
-                  letterSpacing: "0.15em",
-                }}
-              >
-                Also Available On
-              </h2>
-            </div>
-            <div className="relative overflow-hidden w-full">
-              <div className="flex items-center justify-center gap-8 sm:gap-12 md:gap-16 flex-wrap">
-                {marketplaceLogos.map((logo, idx) => (
-                  <img
-                    key={`logo-${idx}`}
-                    src={logo}
-                    alt={`Marketplace ${idx + 1}`}
-                    className="h-10 sm:h-12 md:h-14 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity duration-200 flex-shrink-0"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Subscription Modal */}
       <SubscriptionModal

@@ -64,6 +64,7 @@ function AppContent() {
   const [showDesktopCollections, setShowDesktopCollections] = useState(false)
   const [showMobileCollections, setShowMobileCollections] = useState(false)
   const [cartToast, setCartToast] = useState<{ message: string; id: number } | null>(null)
+  const [isScrolled, setIsScrolled] = useState(false)
   const desktopCollectionsRef = useRef<HTMLDivElement>(null)
 
 
@@ -84,6 +85,20 @@ function AppContent() {
         console.log('🎯 Using stored affiliate ref:', storedRef)
       }
     }
+  }, [])
+
+  // Handle scroll for navbar shadow effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Initialize socket connection for real-time updates
@@ -231,15 +246,16 @@ function AppContent() {
       ) : (
         <>
           <header
-            className="relative z-50 w-full"
+            className={`sticky top-0 z-50 w-full transition-shadow duration-300 ${isScrolled ? 'shadow-2xl' : 'shadow-md'}`}
             style={{
               paddingLeft: 'env(safe-area-inset-left)',
               paddingRight: 'env(safe-area-inset-right)',
-              backgroundColor: 'var(--color-nav-bg)',
-              color: 'var(--color-text-on-nav)',
-              borderBottom: '1px solid rgba(232, 245, 247, 0.16)',
+              backgroundColor: '#1f2937',
+              color: '#ffffff',
+              borderBottom: 'none',
             }}
           >
+            {/* Top Bar */}
             <div className="flex h-16 sm:h-20 items-center justify-between relative w-full px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1920px] mx-auto">
               {/* Mobile/Tablet Layout: Hamburger, Logo (centered), Account */}
               <div className="flex items-center gap-3 md:hidden">
@@ -265,7 +281,7 @@ function AppContent() {
                   className="flex items-center justify-center md:justify-start"
                   aria-label="Go to homepage"
                 >
-                  {/* Mobile Logo - NEFOL wide.png */}
+                  {/* Mobile Logo */}
                   <img
                     src="/IMAGES/NEFOL wide.png"
                     alt="Nefol logo"
@@ -273,13 +289,10 @@ function AppContent() {
                     loading="eager"
                     style={{ maxWidth: '200px' }}
                   />
-                  {/* Desktop Logo - NEFOL icon.png */}
-                  <img
-                    src="/IMAGES/NEFOL icon.png"
-                    alt="Nefol logo"
-                    className="h-10 sm:h-12 w-auto object-contain hidden md:block"
-                    loading="eager"
-                  />
+                  {/* Desktop Logo - Text Style */}
+                  <span className="hidden md:block text-2xl font-bold tracking-wider" style={{ color: '#ffffff' }}>
+                    MIYATI
+                  </span>
                 </a>
               </div>
               
@@ -290,56 +303,60 @@ function AppContent() {
               >
                 <a
                   href="#/user/"
-                  className="text-xs md:text-sm font-light tracking-[0.15em] uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0"
-                  style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)' }}
+                  className="text-sm font-medium uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0 hover:text-red-500"
+                  style={{ color: '#ffffff' }}
                 >
-                  Home
-                  <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-500 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
+                  HOME
                 </a>
                 
-                {/* Collections Dropdown - Desktop */}
+                {/* Theme Features with HOT badge */}
+                <a
+                  href="#/user/features"
+                  className="text-sm font-medium uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0 hover:text-red-500 flex items-center gap-2"
+                  style={{ color: '#ffffff' }}
+                >
+                  BEEST OFFERS
+                  <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">HOT</span>
+                </a>
+                
+                {/* Shop Dropdown - Desktop */}
                 <div 
                   ref={desktopCollectionsRef}
                   className="relative"
                   onMouseEnter={() => {
-                    // Only auto-open on desktop (hover)
                     if (window.innerWidth >= 768) {
                       setShowDesktopCollections(true)
                     }
                   }}
                   onMouseLeave={() => {
-                    // Only auto-close on desktop (hover)
                     if (window.innerWidth >= 768) {
                       setShowDesktopCollections(false)
                     }
                   }}
                 >
                   <button 
-                    className="text-xs md:text-sm font-light tracking-[0.15em] uppercase transition-colors duration-300 flex items-center relative whitespace-nowrap group flex-shrink-0"
+                    className="text-sm font-medium uppercase transition-colors duration-300 flex items-center relative whitespace-nowrap group flex-shrink-0 hover:text-red-500"
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
                       setShowDesktopCollections((prev) => !prev)
                     }}
-                    style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)' }}
+                    style={{ color: '#ffffff' }}
                   >
-                    Collections
+                    SHOP
                     <svg 
-                      className={`ml-2 w-3 h-3 transform transition-transform duration-300 ${showDesktopCollections ? 'rotate-180' : ''}`} 
+                      className={`ml-1 w-3 h-3 transform transition-transform duration-300 ${showDesktopCollections ? 'rotate-180' : ''}`} 
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
-                    <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-500 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
                   </button>
                   {showDesktopCollections && (
                     <div 
                       className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-64 bg-transparent"
-                      style={{ 
-                        zIndex: 9999,
-                      }}
+                      style={{ zIndex: 9999 }}
                       onMouseEnter={() => {
                         if (window.innerWidth >= 768) {
                           setShowDesktopCollections(true)
@@ -355,134 +372,147 @@ function AppContent() {
                       <div 
                         className="w-64 shadow-2xl transition-all duration-300"
                         style={{
-                          backgroundColor: 'var(--color-nav-bg)',
-                          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.06)',
-                          border: '1px solid rgba(220, 229, 231, 0.9)',
+                          backgroundColor: '#ffffff',
+                          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.15)',
                         }}
                       >
-                      <div className="py-6">
-                        <a 
-                          href="#/user/face" 
-                          className="block px-8 py-3 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent hover:bg-opacity-10 hover:bg-white"
-                          onClick={(e) => {
-                            setShowDesktopCollections(false)
-                            e.stopPropagation()
-                          }}
-                          style={{ letterSpacing: '0.1em', color: 'var(--color-text-on-nav)' }}
-                        >
-                          Face Care
-                        </a>
-                        <a 
-                          href="#/user/hair" 
-                          className="block px-8 py-3 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent hover:bg-opacity-10 hover:bg-white"
-                          onClick={(e) => {
-                            setShowDesktopCollections(false)
-                            e.stopPropagation()
-                          }}
-                          style={{ letterSpacing: '0.1em', color: 'var(--color-text-on-nav)' }}
-                        >
-                          Hair Care
-                        </a>
-                        <a 
-                          href="#/user/body" 
-                          className="block px-8 py-3 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent hover:bg-opacity-10 hover:bg-white"
-                          onClick={(e) => {
-                            setShowDesktopCollections(false)
-                            e.stopPropagation()
-                          }}
-                          style={{ letterSpacing: '0.1em', color: 'var(--color-text-on-nav)' }}
-                        >
-                          Body Care
-                        </a>
-                        <a 
-                          href="#/user/combos" 
-                          className="block px-8 py-3 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent hover:bg-opacity-10 hover:bg-white"
-                          onClick={(e) => {
-                            setShowDesktopCollections(false)
-                            e.stopPropagation()
-                          }}
-                          style={{ letterSpacing: '0.1em', color: 'var(--color-text-on-nav)' }}
-                        >
-                          Combos
-                        </a>
-                      </div>
+                        <div className="py-4">
+                          <a 
+                            href="#/user/face" 
+                            className="block px-6 py-3 text-sm font-medium uppercase transition-all duration-300 hover:bg-gray-100"
+                            onClick={(e) => {
+                              setShowDesktopCollections(false)
+                              e.stopPropagation()
+                            }}
+                            style={{ color: '#1a1a1a' }}
+                          >
+                            Face Care
+                          </a>
+                          <a 
+                            href="#/user/hair" 
+                            className="block px-6 py-3 text-sm font-medium uppercase transition-all duration-300 hover:bg-gray-100"
+                            onClick={(e) => {
+                              setShowDesktopCollections(false)
+                              e.stopPropagation()
+                            }}
+                            style={{ color: '#1a1a1a' }}
+                          >
+                            Hair Care
+                          </a>
+                          <a 
+                            href="#/user/body" 
+                            className="block px-6 py-3 text-sm font-medium uppercase transition-all duration-300 hover:bg-gray-100"
+                            onClick={(e) => {
+                              setShowDesktopCollections(false)
+                              e.stopPropagation()
+                            }}
+                            style={{ color: '#1a1a1a' }}
+                          >
+                            Body Care
+                          </a>
+                          <a 
+                            href="#/user/combos" 
+                            className="block px-6 py-3 text-sm font-medium uppercase transition-all duration-300 hover:bg-gray-100"
+                            onClick={(e) => {
+                              setShowDesktopCollections(false)
+                              e.stopPropagation()
+                            }}
+                            style={{ color: '#1a1a1a' }}
+                          >
+                            Combos
+                          </a>
+                        </div>
                       </div>
                     </div>
                   )}
                 </div>
                 
                 <a
-                  href="#/user/shop"
-                  className="text-xs md:text-sm font-light tracking-[0.15em] uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0"
-                  style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)' }}
-                >
-                  Shop
-                  <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-500 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
-                </a>
-                <a
-                  href="#/user/ingredients"
-                  className="text-xs md:text-sm font-light tracking-[0.15em] uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0"
-                  style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)' }}
-                >
-                  Ingredients
-                  <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-500 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
-                </a>
-                <a
                   href="#/user/blog"
-                  className="text-xs md:text-sm font-light tracking-[0.15em] uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0"
-                  style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)' }}
+                  className="text-sm font-medium uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0 hover:text-red-500"
+                  style={{ color: '#ffffff' }}
                 >
-                  Blogs
-                  <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-500 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
+                  BLOG
+                </a>
+                <a
+                  href="#/user/about"
+                  className="text-sm font-medium uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0 hover:text-red-500"
+                  style={{ color: '#ffffff' }}
+                >
+                  ABOUT US
                 </a>
                 <a
                   href="#/user/contact"
-                  className="text-xs md:text-sm font-light tracking-[0.15em] uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0"
-                  style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)' }}
+                  className="text-sm font-medium uppercase transition-colors duration-300 relative group whitespace-nowrap flex-shrink-0 hover:text-red-500"
+                  style={{ color: '#ffffff' }}
                 >
-                  Contact Us
-                  <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-500 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
+                  CONTACT US
                 </a>
               </nav>
               
-              {/* Right Side Icons - Desktop: Search, Wishlist, Socials, Cart, Account | Mobile/Tablet: Account, Cart */}
-              <div className="flex items-center gap-3 md:gap-4 lg:gap-6" style={{ color: 'var(--color-text-secondary-on-teal)' }}>
+              {/* Right Side Icons - Desktop: Search, Wishlist, Cart, Phone | Mobile/Tablet: Account, Cart */}
+              <div className="flex items-center gap-3 md:gap-4 lg:gap-6" style={{ color: '#ffffff' }}>
                 {/* Desktop: Search Icon */}
                 <button 
                   onClick={() => {
                     const event = new CustomEvent('open-search')
                     window.dispatchEvent(event)
                   }}
-                  className="hidden md:flex w-8 h-8 items-center justify-center transition-colors duration-300 relative group"
+                  className="hidden md:flex w-8 h-8 items-center justify-center transition-colors duration-300 hover:text-red-500"
                   aria-label="Search"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-px transition-all duration-300 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
                 </button>
                 
                 {/* Desktop: Wishlist Icon */}
                 <button 
                   onClick={() => window.location.hash = '#/user/wishlist'}
-                  className="hidden md:flex w-8 h-8 items-center justify-center transition-colors duration-300 relative group"
+                  className="hidden md:flex w-8 h-8 items-center justify-center transition-colors duration-300 relative hover:text-red-500"
                   aria-label="Wishlist"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                   {wishlistItems.length > 0 && (
-                    <span className="absolute -top-1 -right-1 text-[10px] font-light rounded-full w-4 h-4 flex items-center justify-center" style={{ fontFamily: 'sans-serif', backgroundColor: 'var(--color-card-bg)', color: 'var(--color-text-body)' }}>
+                    <span className="absolute -top-1 -right-1 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center bg-red-600 text-white">
                       {wishlistItems.length}
                     </span>
                   )}
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-px transition-all duration-300 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
                 </button>
+                
+                {/* Cart Icon */}
+                <button
+                  onClick={() => window.location.hash = '#/user/cart'}
+                  className="hidden md:flex w-8 h-8 items-center justify-center transition-colors duration-300 relative hover:text-red-500"
+                  aria-label="Cart"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  {cartItems.length > 0 && (
+                    <span className="absolute -top-1 -right-1 text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center bg-red-600 text-white">
+                      {cartItems.length}
+                    </span>
+                  )}
+                </button>
+
+                {/* Phone with Call Us */}
+                <div className="hidden lg:flex items-center gap-2 ml-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-300">CALL US:</span>
+                    {/* <span className="text-sm font-bold">(+800) 345 678</span> */}
+                  </div>
+                </div>
                 
                 {/* Account Icon - Visible on all screens */}
                 <button 
                   onClick={() => window.location.hash = isAuthenticated ? '#/user/profile' : '#/user/login'}
-                  className="w-[50px] h-[50px] flex items-center justify-center transition-colors duration-300 relative group"
+                  className="w-[50px] h-[50px] flex items-center justify-center transition-colors duration-300 relative group md:hidden"
                   aria-label="Account"
                   style={{ touchAction: 'manipulation' }}
                 >
@@ -495,33 +525,54 @@ function AppContent() {
                     />
                   ) : (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   )}
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-px transition-all duration-300 group-hover:w-full hidden md:block" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
-                </button>
-                
-                {/* Cart Icon - Hidden on mobile, visible on desktop */}
-                <button
-                  onClick={() => window.location.hash = '#/user/cart'}
-                  className="hidden md:flex w-8 h-8 items-center justify-center transition-colors duration-300 relative group"
-                  aria-label="Cart"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                  {cartItems.length > 0 && (
-                    <span className="absolute -top-1 -right-1 text-[10px] font-semibold rounded-full w-5 h-5 flex items-center justify-center" style={{ fontFamily: 'sans-serif', backgroundColor: '#FF4B4B', color: '#FFFFFF' }}>
-                      {cartItems.length}
-                    </span>
-                  )}
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-px transition-all duration-300 group-hover:w-full" style={{ backgroundColor: 'var(--color-text-secondary-on-teal)' }}></span>
                 </button>
               </div>
             </div>
+
+            {/* Bottom Bar with Search and Categories */}
+            <div className="hidden md:flex items-center gap-4 px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1920px] mx-auto py-3" style={{ backgroundColor: '#111827', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              {/* All Categories Dropdown */}
+              <button 
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium uppercase whitespace-nowrap"
+                style={{ backgroundColor: '#fbbf24', color: '#1a1a1a' }}
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+              >
+                <Menu className="w-4 h-4" />
+                ALL CATEGORIES
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Search Bar */}
+              <form onSubmit={handleSearch} className="flex-1 max-w-2xl">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search..."
+                    className="w-full px-4 py-2 pr-12 text-sm border-none outline-none"
+                    style={{ backgroundColor: '#ffffff', color: '#1a1a1a' }}
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-0 top-0 h-full px-4 flex items-center justify-center"
+                    style={{ backgroundColor: '#fbbf24', color: '#1a1a1a' }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
           </header>
 
-          {/* Mobile Menu - Premium Design */}
+          {/* Mobile Menu */}
           {showMobileMenu && (
             <div
               className="md:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
@@ -532,28 +583,37 @@ function AppContent() {
             >
               <div
                 className="fixed top-20 left-0 right-0 bottom-0 shadow-2xl overflow-y-auto"
-                style={{ maxHeight: 'calc(100vh - 80px)', backgroundColor: 'var(--color-card-bg)' }}
+                style={{ maxHeight: 'calc(100vh - 80px)', backgroundColor: '#ffffff' }}
               >
-                <nav className="flex flex-col px-6 py-12" style={{ backgroundColor: 'var(--color-card-bg)' }}>
+                <nav className="flex flex-col px-6 py-12" style={{ backgroundColor: '#ffffff' }}>
                   <a 
                     href="#/user/" 
-                    className="py-4 text-sm font-light tracking-[0.15em] uppercase border-b border-slate-100 transition-colors duration-300"
-                    style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)', color: '#1a1a1a' }}
+                    className="py-4 text-sm font-medium uppercase border-b border-gray-200 transition-colors duration-300 hover:text-red-500"
+                    style={{ color: '#1a1a1a' }}
                     onClick={() => setShowMobileMenu(false)}
                   >
-                    Home
+                    HOME
+                  </a>
+                  <a 
+                    href="#/user/features" 
+                    className="py-4 text-sm font-medium uppercase border-b border-gray-200 transition-colors duration-300 hover:text-red-500 flex items-center gap-2"
+                    style={{ color: '#1a1a1a' }}
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    THEME FEATURES
+                    <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">HOT</span>
                   </a>
                   <div>
                     <button
-                      className="py-4 text-sm font-light tracking-[0.15em] uppercase border-b border-slate-100 w-full flex items-center justify-between transition-colors duration-300"
-                      style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)', color: '#1a1a1a' }}
+                      className="py-4 text-sm font-medium uppercase border-b border-gray-200 w-full flex items-center justify-between transition-colors duration-300 hover:text-red-500"
+                      style={{ color: '#1a1a1a' }}
                       onClick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
                         setShowMobileCollections((prev) => !prev)
                       }}
                     >
-                      Collections
+                      SHOP
                       <svg 
                         className={`w-4 h-4 transform transition-transform duration-300 ${showMobileCollections ? 'rotate-180' : ''}`} 
                         fill="none" 
@@ -561,15 +621,15 @@ function AppContent() {
                         viewBox="0 0 24 24"
                         style={{ color: '#1a1a1a' }}
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
                     {showMobileCollections && (
-                      <div className="bg-slate-50" onClick={(e) => e.stopPropagation()}>
+                      <div className="bg-gray-50" onClick={(e) => e.stopPropagation()}>
                         <a 
                           href="#/user/face" 
-                          className="block py-3 px-8 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent"
-                          style={{ letterSpacing: '0.1em', color: '#1a1a1a' }}
+                          className="block py-3 px-8 text-sm font-medium uppercase transition-all duration-300 hover:text-red-500"
+                          style={{ color: '#1a1a1a' }}
                           onClick={(e) => {
                             e.stopPropagation()
                             setShowMobileMenu(false)
@@ -580,8 +640,8 @@ function AppContent() {
                         </a>
                         <a 
                           href="#/user/hair" 
-                          className="block py-3 px-8 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent"
-                          style={{ letterSpacing: '0.1em', color: '#1a1a1a' }}
+                          className="block py-3 px-8 text-sm font-medium uppercase transition-all duration-300 hover:text-red-500"
+                          style={{ color: '#1a1a1a' }}
                           onClick={(e) => {
                             e.stopPropagation()
                             setShowMobileMenu(false)
@@ -592,8 +652,8 @@ function AppContent() {
                         </a>
                         <a 
                           href="#/user/body" 
-                          className="block py-3 px-8 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent"
-                          style={{ letterSpacing: '0.1em', color: '#1a1a1a' }}
+                          className="block py-3 px-8 text-sm font-medium uppercase transition-all duration-300 hover:text-red-500"
+                          style={{ color: '#1a1a1a' }}
                           onClick={(e) => {
                             e.stopPropagation()
                             setShowMobileMenu(false)
@@ -604,8 +664,8 @@ function AppContent() {
                         </a>
                         <a 
                           href="#/user/combos" 
-                          className="block py-3 px-8 text-xs font-light tracking-[0.1em] uppercase transition-all duration-300 border-l-2 border-transparent border-b border-slate-100"
-                          style={{ letterSpacing: '0.1em', color: '#1a1a1a' }}
+                          className="block py-3 px-8 text-sm font-medium uppercase transition-all duration-300 hover:text-red-500 border-b border-gray-200"
+                          style={{ color: '#1a1a1a' }}
                           onClick={(e) => {
                             e.stopPropagation()
                             setShowMobileMenu(false)
@@ -618,36 +678,28 @@ function AppContent() {
                     )}
                   </div>
                   <a 
-                    href="#/user/shop"
-                    className="py-4 text-sm font-light tracking-[0.15em] uppercase border-b border-slate-100 transition-colors duration-300"
-                    style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)', color: '#1a1a1a' }}
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    Shop
-                  </a>
-                  <a 
-                    href="#/user/ingredients"
-                    className="py-4 text-sm font-light tracking-[0.15em] uppercase border-b border-slate-100 transition-colors duration-300"
-                    style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)', color: '#1a1a1a' }}
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    Ingredients
-                  </a>
-                  <a 
                     href="#/user/blog"
-                    className="py-4 text-sm font-light tracking-[0.15em] uppercase border-b border-slate-100 transition-colors duration-300"
-                    style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)', color: '#1a1a1a' }}
+                    className="py-4 text-sm font-medium uppercase border-b border-gray-200 transition-colors duration-300 hover:text-red-500"
+                    style={{ color: '#1a1a1a' }}
                     onClick={() => setShowMobileMenu(false)}
                   >
-                    Blogs
+                    BLOG
+                  </a>
+                  <a 
+                    href="#/user/about"
+                    className="py-4 text-sm font-medium uppercase border-b border-gray-200 transition-colors duration-300 hover:text-red-500"
+                    style={{ color: '#1a1a1a' }}
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    ABOUT US
                   </a>
                   <a 
                     href="#/user/contact"
-                    className="py-4 text-sm font-light tracking-[0.15em] uppercase border-b border-slate-100 transition-colors duration-300"
-                    style={{ letterSpacing: '0.15em', fontFamily: 'var(--font-heading-family)', color: '#1a1a1a' }}
+                    className="py-4 text-sm font-medium uppercase border-b border-gray-200 transition-colors duration-300 hover:text-red-500"
+                    style={{ color: '#1a1a1a' }}
                     onClick={() => setShowMobileMenu(false)}
                   >
-                    Contact Us
+                    CONTACT US
                   </a>
                 </nav>
               </div>
@@ -670,7 +722,7 @@ function AppContent() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8">
             {/* Brand Section */}
             <div className="md:col-span-1">
-              <h3 className="mb-3 sm:mb-4 text-lg sm:text-xl font-light tracking-wide" style={{ color: 'var(--color-text-on-nav)', fontFamily: 'var(--font-heading-family)' }}>NEFOL®</h3>
+              <h3 className="mb-3 sm:mb-4 text-lg sm:text-xl font-light tracking-wide" style={{ color: 'var(--color-text-on-nav)', fontFamily: 'var(--font-heading-family)' }}>MIYATI®</h3>
               <p className="text-xs sm:text-sm font-light leading-relaxed mb-4" style={{ color: 'var(--color-text-secondary-on-teal)' }}>Natural and safe skincare for every skin type. Made with love and care.</p>
             </div>
 
@@ -1017,7 +1069,7 @@ case '/user/affiliate-partner':
   return RequiredAuth(<AffiliatePartner />)
 
 case '/user/referral-history':
-  return RequiredAuth(<ReferralHistory />)
+  return RequiredAuth(<ReferralHistory />) 
 
     case '/user/reports': return <Reports />
     case '/user/profile': return <Profile />
@@ -1078,27 +1130,27 @@ export default function App() {
   )
 }
 
-      <footer className="bg-[#2B2B2B] text-white w-full overflow-x-hidden">
+      <footer className="bg-[#2a2a2a] text-white w-full overflow-x-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
           {/* Main Footer Content */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* Brand Section */}
             <div>
-              <h3 className="text-xl font-bold mb-4 tracking-wide">NEFOL®</h3>
-              <p className="text-sm text-gray-300 mb-4 leading-relaxed">
-                Natural and safe skincare for every skin type. Made with love and care.
+              <h3 className="text-2xl font-bold mb-4 tracking-wide">OPTIMA</h3>
+              <p className="text-sm text-gray-400 mb-6 leading-relaxed">
+                We specialise in delivery and supply of organic food products, produced by local farmers.
               </p>
               
               {/* Contact Info */}
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="space-y-3 mb-6">
+                <div className="flex items-start gap-2 text-sm">
+                  <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <span className="text-gray-300">NEED HELP?</span>
-                </div>
-                <div className="text-base font-semibold">
-                  (+800) 345 678, (+800) 123 456
+                  <div>
+                    <div className="text-gray-400 text-xs mb-1">NEED HELP?</div>
+                    <div className="text-white font-medium">(+800) 345 678, (+800) 123 456</div>
+                  </div>
                 </div>
               </div>
 
@@ -1131,53 +1183,44 @@ export default function App() {
                     <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.619 11.174-.105-.949-.2-2.405.042-3.441.219-.937 1.407-5.965 1.407-5.965s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.487.535 6.624 0 12-5.373 12-12S18.627.001 12 .001z"/>
                   </svg>
                 </a>
-                <a href="https://vk.com/nefolclub" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-xs font-semibold">
-                  VK
+                <a href="https://vk.com/nefolclub" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.18 14.14h-1.41c-.68 0-.89-.54-2.11-1.76-1.06-1.06-1.53-1.2-1.8-1.2-.37 0-.47.1-.47.59v1.61c0 .43-.14.69-1.27.69-1.87 0-3.94-1.13-5.4-3.24-2.2-3-2.81-5.25-2.81-5.71 0-.27.1-.52.59-.52h1.41c.44 0 .61.2.78.67.85 2.37 2.27 4.45 2.85 4.45.22 0 .32-.1.32-.66V9.47c-.07-1.15-.67-1.25-.67-1.65 0-.22.18-.43.47-.43h2.22c.37 0 .51.2.51.63v3.42c0 .37.17.51.27.51.22 0 .4-.14.81-.54 1.26-1.41 2.16-3.59 2.16-3.59.12-.25.32-.49.81-.49h1.41c.53 0 .65.27.53.63-.19.89-2.18 3.99-2.18 3.99-.18.3-.25.43 0 .77.18.25.78.76 1.18 1.22.73.82 1.3 1.51 1.45 1.99.16.47-.09.71-.61.71z"/>
+                  </svg>
                 </a>
               </div>
             </div>
 
             {/* Information Links */}
             <div>
-              <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">INFORMATION</h4>
+              <h4 className="text-sm font-bold mb-4 uppercase tracking-wider text-white">INFORMATION</h4>
               <ul className="space-y-2.5">
-                <li><a href="#/user/shipping-policy" className="text-sm text-gray-300 hover:text-white transition-colors">Delivery</a></li>
-                <li><a href="#/user/about" className="text-sm text-gray-300 hover:text-white transition-colors">About us</a></li>
-                <li><a href="#/user/payment" className="text-sm text-gray-300 hover:text-white transition-colors">Secure payment</a></li>
-                <li><a href="#/user/contact" className="text-sm text-gray-300 hover:text-white transition-colors">Contact us</a></li>
-                <li><a href="#/user/sitemap" className="text-sm text-gray-300 hover:text-white transition-colors">Sitemap</a></li>
-                <li><a href="#/user/stores" className="text-sm text-gray-300 hover:text-white transition-colors">Stores</a></li>
+                <li><a href="#/user/shipping-policy" className="text-sm text-gray-400 hover:text-white transition-colors">Delivery</a></li>
+                <li><a href="#/user/about" className="text-sm text-gray-400 hover:text-white transition-colors">About us</a></li>
+                <li><a href="#/user/payment" className="text-sm text-gray-400 hover:text-white transition-colors">Secure payment</a></li>
+                <li><a href="#/user/contact" className="text-sm text-gray-400 hover:text-white transition-colors">Contact us</a></li>
+                <li><a href="#/user/sitemap" className="text-sm text-gray-400 hover:text-white transition-colors">Sitemap</a></li>
+                <li><a href="#/user/stores" className="text-sm text-gray-400 hover:text-white transition-colors">Stores</a></li>
               </ul>
             </div>
 
             {/* Custom Links */}
             <div>
-              <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">CUSTOM LINKS</h4>
+              <h4 className="text-sm font-bold mb-4 uppercase tracking-wider text-white">CUSTOM LINKS</h4>
               <ul className="space-y-2.5">
-                <li><a href="#/user/legal-notice" className="text-sm text-gray-300 hover:text-white transition-colors">Legal Notice</a></li>
-                <li><a href="#/user/offers" className="text-sm text-gray-300 hover:text-white transition-colors">Prices drop</a></li>
-                <li><a href="#/user/new-arrivals" className="text-sm text-gray-300 hover:text-white transition-colors">New products</a></li>
-                <li><a href="#/user/best-sellers" className="text-sm text-gray-300 hover:text-white transition-colors">Best sales</a></li>
-                <li><a href="#/user/account" className="text-sm text-gray-300 hover:text-white transition-colors">My account</a></li>
-                <li>
-                  <a
-                    href="#/user/affiliate-partner"
-                    onClick={() => {
-                      sessionStorage.setItem('affiliate_referrer', 'home')
-                    }}
-                    className="text-sm text-gray-300 hover:text-white transition-colors"
-                  >
-                    Affiliate Program
-                  </a>
-                </li>
-                <li><a href="#/user/terms-of-service" className="text-sm text-gray-300 hover:text-white transition-colors">Terms and conditions</a></li>
+                <li><a href="#/user/legal-notice" className="text-sm text-gray-400 hover:text-white transition-colors">Legal Notice</a></li>
+                <li><a href="#/user/offers" className="text-sm text-gray-400 hover:text-white transition-colors">Prices drop</a></li>
+                <li><a href="#/user/new-arrivals" className="text-sm text-gray-400 hover:text-white transition-colors">New products</a></li>
+                <li><a href="#/user/best-sellers" className="text-sm text-gray-400 hover:text-white transition-colors">Best sales</a></li>
+                <li><a href="#/user/account" className="text-sm text-gray-400 hover:text-white transition-colors">My account</a></li>
+                <li><a href="#/user/terms-of-service" className="text-sm text-gray-400 hover:text-white transition-colors">Terms and conditions</a></li>
               </ul>
             </div>
 
             {/* Newsletter */}
             <div>
-              <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">NEWSLETTER</h4>
-              <p className="text-sm text-gray-300 mb-4">Sign up for our e-mail to get latest news.</p>
+              <h4 className="text-sm font-bold mb-4 uppercase tracking-wider text-white">NEWSLETTER</h4>
+              <p className="text-sm text-gray-400 mb-4">Sign up for our e-mail to get latest news.</p>
               
               <div className="flex gap-2 mb-6">
                 <input
@@ -1214,39 +1257,52 @@ export default function App() {
           <div className="border-t border-gray-700 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               {/* Bottom Links */}
-              <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 text-xs text-gray-400">
+              <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 text-xs text-gray-500">
                 <a href="#/user/" className="hover:text-white transition-colors">Online Shopping</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/promotions" className="hover:text-white transition-colors">Promotions</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/help" className="hover:text-white transition-colors">Help</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/customer-service" className="hover:text-white transition-colors">Customer Service</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/support" className="hover:text-white transition-colors">Support</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/popular" className="hover:text-white transition-colors">Most Populars</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/manufacturers" className="hover:text-white transition-colors">Manufacturers</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/shipping" className="hover:text-white transition-colors">Shipping</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/payments" className="hover:text-white transition-colors">Payments</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/refunds" className="hover:text-white transition-colors">Refunds</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/discount" className="hover:text-white transition-colors">Discount</a>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-700">|</span>
                 <a href="#/user/policy" className="hover:text-white transition-colors">Policy</a>
               </div>
 
               {/* Payment Icons */}
               <div className="flex items-center gap-2">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" className="h-6 w-auto bg-white px-2 py-1 rounded" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className="h-6 w-auto bg-white px-2 py-1 rounded" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6 w-auto bg-white px-2 py-1 rounded" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="American Express" className="h-6 w-auto bg-white px-2 py-1 rounded" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" className="h-6 w-auto bg-white px-2 py-1 rounded" />
+                <div className="bg-white px-3 py-1.5 rounded flex items-center justify-center" style={{ minWidth: '50px', height: '32px' }}>
+                  <span className="text-blue-600 font-bold text-xs">Skrill</span>
+                </div>
+                <div className="bg-white px-3 py-1.5 rounded flex items-center justify-center" style={{ minWidth: '50px', height: '32px' }}>
+                  <span className="text-orange-500 font-bold text-xs">Klarna</span>
+                </div>
+                <div className="bg-white px-3 py-1.5 rounded flex items-center justify-center" style={{ minWidth: '50px', height: '32px' }}>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex" className="h-4 w-auto" />
+                </div>
+                <div className="bg-white px-3 py-1.5 rounded flex items-center justify-center" style={{ minWidth: '50px', height: '32px' }}>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-4 w-auto" />
+                </div>
+                <div className="bg-white px-3 py-1.5 rounded flex items-center justify-center" style={{ minWidth: '50px', height: '32px' }}>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-4 w-auto" />
+                </div>
+                <div className="bg-white px-3 py-1.5 rounded flex items-center justify-center" style={{ minWidth: '50px', height: '32px' }}>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className="h-4 w-auto" />
+                </div>
               </div>
             </div>
           </div>
