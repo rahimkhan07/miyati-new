@@ -1077,3 +1077,178 @@ export default function App() {
     </AuthProvider>
   )
 }
+
+      <footer className="bg-[#2B2B2B] text-white w-full overflow-x-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+          {/* Main Footer Content */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            {/* Brand Section */}
+            <div>
+              <h3 className="text-xl font-bold mb-4 tracking-wide">NEFOL®</h3>
+              <p className="text-sm text-gray-300 mb-4 leading-relaxed">
+                Natural and safe skincare for every skin type. Made with love and care.
+              </p>
+              
+              {/* Contact Info */}
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <span className="text-gray-300">NEED HELP?</span>
+                </div>
+                <div className="text-base font-semibold">
+                  (+800) 345 678, (+800) 123 456
+                </div>
+              </div>
+
+              {/* Social Icons */}
+              <div className="flex items-center gap-3">
+                <a href="https://www.facebook.com/share/1H3dWrPgcY/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="https://x.com/nefol_official?s=21" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+                <a href="https://www.instagram.com/nefol_official?igsh=d2NkaXk2NW92emhq&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="https://youtube.com/@nefol.official?si=4kDfx02DoJ8Lpx9F" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <Youtube className="w-5 h-5" />
+                </a>
+                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                </a>
+                <a href="https://www.linkedin.com/company/nefol-aesthetics-pvt-ltd/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a href="https://pin.it/hfoLEqFgB" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.619 11.174-.105-.949-.2-2.405.042-3.441.219-.937 1.407-5.965 1.407-5.965s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.487.535 6.624 0 12-5.373 12-12S18.627.001 12 .001z"/>
+                  </svg>
+                </a>
+                <a href="https://vk.com/nefolclub" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-xs font-semibold">
+                  VK
+                </a>
+              </div>
+            </div>
+
+            {/* Information Links */}
+            <div>
+              <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">INFORMATION</h4>
+              <ul className="space-y-2.5">
+                <li><a href="#/user/shipping-policy" className="text-sm text-gray-300 hover:text-white transition-colors">Delivery</a></li>
+                <li><a href="#/user/about" className="text-sm text-gray-300 hover:text-white transition-colors">About us</a></li>
+                <li><a href="#/user/payment" className="text-sm text-gray-300 hover:text-white transition-colors">Secure payment</a></li>
+                <li><a href="#/user/contact" className="text-sm text-gray-300 hover:text-white transition-colors">Contact us</a></li>
+                <li><a href="#/user/sitemap" className="text-sm text-gray-300 hover:text-white transition-colors">Sitemap</a></li>
+                <li><a href="#/user/stores" className="text-sm text-gray-300 hover:text-white transition-colors">Stores</a></li>
+              </ul>
+            </div>
+
+            {/* Custom Links */}
+            <div>
+              <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">CUSTOM LINKS</h4>
+              <ul className="space-y-2.5">
+                <li><a href="#/user/legal-notice" className="text-sm text-gray-300 hover:text-white transition-colors">Legal Notice</a></li>
+                <li><a href="#/user/offers" className="text-sm text-gray-300 hover:text-white transition-colors">Prices drop</a></li>
+                <li><a href="#/user/new-arrivals" className="text-sm text-gray-300 hover:text-white transition-colors">New products</a></li>
+                <li><a href="#/user/best-sellers" className="text-sm text-gray-300 hover:text-white transition-colors">Best sales</a></li>
+                <li><a href="#/user/account" className="text-sm text-gray-300 hover:text-white transition-colors">My account</a></li>
+                <li>
+                  <a
+                    href="#/user/affiliate-partner"
+                    onClick={() => {
+                      sessionStorage.setItem('affiliate_referrer', 'home')
+                    }}
+                    className="text-sm text-gray-300 hover:text-white transition-colors"
+                  >
+                    Affiliate Program
+                  </a>
+                </li>
+                <li><a href="#/user/terms-of-service" className="text-sm text-gray-300 hover:text-white transition-colors">Terms and conditions</a></li>
+              </ul>
+            </div>
+
+            {/* Newsletter */}
+            <div>
+              <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider">NEWSLETTER</h4>
+              <p className="text-sm text-gray-300 mb-4">Sign up for our e-mail to get latest news.</p>
+              
+              <div className="flex gap-2 mb-6">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="flex-1 px-4 py-2.5 bg-white text-gray-900 text-sm rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded transition-colors">
+                  Subscribe
+                </button>
+              </div>
+
+              {/* App Store Badges */}
+              <div className="flex gap-3">
+                <a href="#" className="block">
+                  <img 
+                    src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" 
+                    alt="Download on App Store" 
+                    className="h-10 w-auto"
+                  />
+                </a>
+                <a href="#" className="block">
+                  <img 
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
+                    alt="Get it on Google Play" 
+                    className="h-10 w-auto"
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="border-t border-gray-700 pt-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              {/* Bottom Links */}
+              <div className="flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2 text-xs text-gray-400">
+                <a href="#/user/" className="hover:text-white transition-colors">Online Shopping</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/promotions" className="hover:text-white transition-colors">Promotions</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/help" className="hover:text-white transition-colors">Help</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/customer-service" className="hover:text-white transition-colors">Customer Service</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/support" className="hover:text-white transition-colors">Support</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/popular" className="hover:text-white transition-colors">Most Populars</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/manufacturers" className="hover:text-white transition-colors">Manufacturers</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/shipping" className="hover:text-white transition-colors">Shipping</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/payments" className="hover:text-white transition-colors">Payments</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/refunds" className="hover:text-white transition-colors">Refunds</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/discount" className="hover:text-white transition-colors">Discount</a>
+                <span className="text-gray-600">|</span>
+                <a href="#/user/policy" className="hover:text-white transition-colors">Policy</a>
+              </div>
+
+              {/* Payment Icons */}
+              <div className="flex items-center gap-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="Apple Pay" className="h-6 w-auto bg-white px-2 py-1 rounded" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className="h-6 w-auto bg-white px-2 py-1 rounded" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6 w-auto bg-white px-2 py-1 rounded" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="American Express" className="h-6 w-auto bg-white px-2 py-1 rounded" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" className="h-6 w-auto bg-white px-2 py-1 rounded" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
