@@ -121,11 +121,11 @@ const HotDeals: React.FC<HotDealsProps> = ({ productIndex = 0 }) => {
         </div>
 
         {/* Image */}
-        <div className="w-full h-[160px] flex items-center justify-center my-4 bg-white rounded-lg">
+        <div className="w-full h-[160px] flex items-center justify-center my-4 bg-white rounded-xl overflow-hidden">
           <img
             src={product.image}
             alt={product.name}
-            className="max-w-full max-h-full object-contain"
+            className="max-w-full max-h-full object-contain rounded-xl"
             onError={(e) => {
               e.currentTarget.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
             }}
@@ -171,7 +171,7 @@ const HotDeals: React.FC<HotDealsProps> = ({ productIndex = 0 }) => {
         </p>
 
         {/* Countdown */}
-        <div className="bg-[#4f8fb8] text-white rounded-full p-4 flex justify-around mt-4">
+        <div className="bg-gray-800 text-white rounded-full p-4 flex justify-around mt-4">
           <TimeBox value={timeLeft.days} label="days" />
           <TimeBox value={timeLeft.hours} label="hours" />
           <TimeBox value={timeLeft.minutes} label="mins" />

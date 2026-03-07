@@ -1434,3 +1434,85 @@ html {
   transform: translateX(-20px);
   transition: opacity 800ms ease-in-out, transform 800ms ease-in-out;
 }
+
+
+/* ===== PRODUCT CARD IMAGE BORDER RADIUS ===== */
+/* Apply border radius to all product card images across the website */
+
+/* Product card images */
+.product-card img,
+[class*="product"] img,
+[class*="Product"] img {
+  border-radius: 12px;
+}
+
+/* Specific product image containers */
+.product-image img,
+.product-img img,
+.product-thumbnail img,
+.product-list-image img {
+  border-radius: 12px;
+}
+
+/* Grid product cards */
+.grid img[alt*="product"],
+.grid img[alt*="Product"],
+.flex img[alt*="product"],
+.flex img[alt*="Product"] {
+  border-radius: 12px;
+}
+
+/* Product cards in various pages */
+[class*="card"] img[class*="object-cover"],
+[class*="Card"] img[class*="object-cover"] {
+  border-radius: 12px;
+}
+
+/* Hover states - maintain border radius */
+.product-card img:hover,
+[class*="product"] img:hover {
+  border-radius: 12px;
+}
+
+/* Product detail page images */
+.pdp-image img,
+.product-detail-image img,
+.product-gallery img {
+  border-radius: 12px;
+}
+
+/* Wishlist and cart product images */
+.wishlist-item img,
+.cart-item img,
+.order-item img {
+  border-radius: 12px;
+}
+
+/* Search results product images */
+.search-result img,
+.search-product img {
+  border-radius: 12px;
+}
+
+/* Category page product images */
+.category-product img,
+.collection-product img {
+  border-radius: 12px;
+}
+
+/* Responsive border radius */
+@media (max-width: 640px) {
+  .product-card img,
+  [class*="product"] img,
+  [class*="Product"] img {
+    border-radius: 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-card img,
+  [class*="product"] img,
+  [class*="Product"] img {
+    border-radius: 16px;
+  }
+}

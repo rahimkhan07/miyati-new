@@ -694,7 +694,7 @@ const HotDealsCarousel: React.FC = () => {
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg">
-      
+      GET
     </div>
   );
 };
@@ -1325,43 +1325,20 @@ export default function Home() {
           <div className="relative overflow-hidden rounded-2xl shadow-2xl" style={{ height: '500px' }}>
             {/* Carousel Images */}
             {topMediaImages.map((image, index) => {
-              const slides = [
-                {
-                  image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1920",
-                  title: "Premium Headphones",
-                  subtitle: "Experience Crystal Clear Sound",
-                },
-                {
-                  image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=1920",
-                  title: "Latest Collection",
-                  subtitle: "Latest Collection 2024",
-                },
-                {
-                  image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=1920",
-                  title: "Sport Collection",
-                  subtitle: "Run Faster, Jump Higher",
-                },
-                {
-                  image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&q=80&w=1920",
-                  title: "Gaming Gear",
-                  subtitle: "Level Up Your Game",
-                },
-                {
-                  image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1920",
-                  title: "Smart Devices",
-                  subtitle: "Technology Meets Style",
-                },
-              ];
-
-              const slide = slides[index % slides.length];
+              // Use backend images with titles
+              const slideData = {
+                image: image,
+                title: `Slide ${index + 1}`,
+                subtitle: "Discover Amazing Products",
+              };
               
               // Different gradient colors for each slide
               const gradientColors = [
-                'from-purple-600/0 to-blue-600/0 hover:from-purple-600/70 hover:to-blue-600/70', // Headphones
-                'from-orange-500/0 to-pink-600/0 hover:from-orange-500/70 hover:to-pink-600/70', // Products
-                'from-green-500/0 to-teal-600/0 hover:from-green-500/70 hover:to-teal-600/70', // Shoes
-                'from-red-600/0 to-purple-600/0 hover:from-red-600/70 hover:to-purple-600/70', // Gaming
-                'from-blue-600/0 to-indigo-700/0 hover:from-blue-600/70 hover:to-indigo-700/70', // Smart Devices
+                'from-purple-600/0 to-blue-600/0 hover:from-purple-600/70 hover:to-blue-600/70',
+                'from-orange-500/0 to-pink-600/0 hover:from-orange-500/70 hover:to-pink-600/70',
+                'from-green-500/0 to-teal-600/0 hover:from-green-500/70 hover:to-teal-600/70',
+                'from-red-600/0 to-purple-600/0 hover:from-red-600/70 hover:to-purple-600/70',
+                'from-blue-600/0 to-indigo-700/0 hover:from-blue-600/70 hover:to-indigo-700/70',
               ];
               
               return (
@@ -1373,11 +1350,12 @@ export default function Home() {
                 >
                   {/* Background Image */}
                   <img
-                    src={slide.image}
-                    alt={slide.title || `Slide ${index + 1}`}
+                    src={slideData.image}
+                    alt={slideData.title || `Slide ${index + 1}`}
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = image;
+                      // Fallback to a default image if backend image fails
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=1920";
                     }}
                   />
                   
@@ -1390,13 +1368,13 @@ export default function Home() {
                   {/* Content */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center text-white px-4 max-w-3xl">
-                      {slide.title && (
+                      {slideData.title && (
                         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 drop-shadow-2xl">
-                          {slide.title}
+                          {slideData.title}
                         </h2>
                       )}
                       <p className="text-xl sm:text-2xl md:text-3xl opacity-95 drop-shadow-lg font-light">
-                        {slide.subtitle}
+                        {slideData.subtitle}
                       </p>
                       <button 
                         onClick={() => window.location.hash = '#/user/shop'}
@@ -1490,7 +1468,7 @@ export default function Home() {
                   <img
                     src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&q=80&w=400"
                     alt="Smartwatch"
-                    className="w-full h-full object-contain drop-shadow-2xl"
+                    className="w-full h-full object-contain drop-shadow-2xl rounded-3xl"
                     onError={(e) => {
                       e.currentTarget.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
                     }}
@@ -1506,7 +1484,7 @@ export default function Home() {
       </section>
 
       {/* ==================Hot Deals======================= */}
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="min-h-screen rounded-3xl flex items-center justify-center bg-gray-100 px-4">
         <h1
           className="text-5xl sm:text-5xl text-[white] font-normal text-center"
           style={{ fontFamily: "'Great Vibes', cursive", textAlign:"center", marginRight:"2vh", backgroundColor:"#4f8fb8", padding:"4vh", borderRadius:"2vh"}}
@@ -1514,7 +1492,7 @@ export default function Home() {
           Hot Deals <br/> will be end soon
 
         </h1>
-        <HotDeals productIndex={0} />
+        <HotDeals productIndex={0}  />
         <HotDeals productIndex={1} />
         <HotDeals productIndex={2} />
       </div>
@@ -1643,7 +1621,7 @@ export default function Home() {
                               <img
                                 src={product.listImage}
                                 alt={product.title}
-                                className="max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
+                                className="max-h-56 rounded-3xl object-contain transition-transform duration-500 group-hover:scale-105"
                                 loading="lazy"
                                 onError={(e) => {
                                   const fallbackImages = [
@@ -1769,12 +1747,12 @@ export default function Home() {
               className="group relative bg-[#f7f7f7] border border-gray-200 rounded-3xl p-4 sm:p-[18px] transition-all duration-300 hover:shadow-xl overflow-hidden cursor-pointer"
               onClick={() => (window.location.hash = "#/user/body")}
             >
-              <div className="relative bg-white rounded-2xl overflow-hidden mb-6 sm:mb-8">
+              <div className="relative rounded-2xl overflow-hidden mb-6 sm:mb-8">
                 <div className="h-48 sm:h-72 flex items-center justify-center p-4 sm:p-8">
                   <img
                     src={categoryImages["Body"] || "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=400"}
                     alt="Body"
-                    className="max-h-36 sm:max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="max-h-36 rounded-3xl sm:max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.src = "https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&q=80&w=400";
@@ -1795,12 +1773,12 @@ export default function Home() {
               className="group relative bg-[#f7f7f7] border border-gray-200 rounded-3xl p-4 sm:p-[18px] transition-all duration-300 hover:shadow-xl overflow-hidden cursor-pointer"
               onClick={() => (window.location.hash = "#/user/face")}
             >
-              <div className="relative bg-white rounded-2xl overflow-hidden mb-6 sm:mb-8">
+              <div className="relative rounded-2xl overflow-hidden mb-6 sm:mb-8">
                 <div className="h-48 sm:h-72 flex items-center justify-center p-4 sm:p-8">
                   <img
                     src={categoryImages["Face"] || "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80&w=400"}
                     alt="Face"
-                    className="max-h-36 sm:max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="max-h-36 rounded-3xl sm:max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.src = "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80&w=400";
@@ -1818,7 +1796,7 @@ export default function Home() {
 
             {/* Hair */}
             <div
-              className="group relative bg-[#f7f7f7] border border-gray-200 rounded-3xl p-4 sm:p-[18px] transition-all duration-300 hover:shadow-xl overflow-hidden cursor-pointer"
+              className="group relative  border border-gray-200 rounded-3xl p-4 sm:p-[18px] transition-all duration-300 hover:shadow-xl overflow-hidden cursor-pointer"
               onClick={() => (window.location.hash = "#/user/hair")}
             >
               <div className="relative bg-white rounded-2xl overflow-hidden mb-6 sm:mb-8">
@@ -1826,7 +1804,7 @@ export default function Home() {
                   <img
                     src={categoryImages["Hair"] || "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&q=80&w=400"}
                     alt="Hair"
-                    className="max-h-36 sm:max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="max-h-36 rounded-3xl sm:max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.src = "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&q=80&w=400";
@@ -1844,7 +1822,7 @@ export default function Home() {
 
             {/* Combos */}
             <div
-              className="group relative bg-[#f7f7f7] border border-gray-200 rounded-3xl p-4 sm:p-[18px] transition-all duration-300 hover:shadow-xl overflow-hidden cursor-pointer"
+              className="group relative border border-gray-200 rounded-3xl p-4 sm:p-[18px] transition-all duration-300 hover:shadow-xl overflow-hidden cursor-pointer"
               onClick={() => (window.location.hash = "#/user/combos")}
             >
               <div className="relative bg-white rounded-2xl overflow-hidden mb-6 sm:mb-8">
@@ -1852,7 +1830,7 @@ export default function Home() {
                   <img
                     src={categoryImages["Combos"] || "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=400"}
                     alt="Combos"
-                    className="max-h-36 sm:max-h-56 object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="max-h-36 sm:max-h-56 rounded-3xl object-contain transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.src = "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=400";
